@@ -1,0 +1,35 @@
+﻿.top-margin {
+  margin-top: 20px
+}
+
+@media (min-width: 320px) and (max-width: 767px) {
+  input, select, div.dvrange {
+    width: 100%;
+  }
+
+  .top_margin_button {
+    margin-top: 2%;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  input, select, div.dvrange {
+    width: 60%;
+  }
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+  input, select, div.dvrange {
+    width: 40%;
+  }
+}
+
+@media (min-width: 1200px) {
+  input, select, div.dvrange {
+    width: 40%;
+  }
+}
+
+.top_margin {
+  margin-top: 1%;
+}

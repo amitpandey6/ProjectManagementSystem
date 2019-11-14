@@ -1,0 +1,174 @@
+﻿
+<div class="container-fluid">
+  <div class="row">
+    <div class="alert alert-warning" *ngIf="MessageType=='Error'">
+      <strong>Warning!</strong> {{MessageInfo}}
+    </div>
+    <div class="alert alert-success" *ngIf="MessageType=='Sucesses'">
+      <strong>Success!</strong> {{MessageInfo}}
+    </div>
+  </div>
+  <div class="row top-margin">
+    <div class="col-sm-2 col-lg-1">
+      <label>Project :</label>
+    </div>
+    <div class="col-sm-7 col-lg-8">
+      <input type="text" [readonly]="true"
+             value="{{ProjectName}}" class="form-control" />
+      <input type="hidden" [(ngModel)]="taskinfo.Project_ID" />&nbsp;
+
+
+    </div>
+    <div class="col-sm-2 col-lg-2 col-sm-pull-4">
+      <button (click)="OnProjectSearchOpen()">Search</button>
+    </div>
+  </div>
+  <div class="row top_margin">
+    <div class="col-md-2 col-sm-2">
+      <label>Task </label>
+    </div>
+    <div class="col-md-10 col-sm-10 form-group">
+      <input type="text" [(ngModel)]="taskinfo.TaskName" name="TaskName" class="form-control" #tsname="ngModel">
+
+    </div>
+  </div>
+  <div class="row row-margin" *ngIf="TaskID <= 0">
+    <div class="col-md-2 col-sm-2">
+    </div>
+    <div class="col-md-2 col-sm-2 form-group">
+      <input type="checkbox" style="min-width:inherit;" [(ngModel)]="IsParentTask" style="margin-left: -15px !important;" (click)="OnIsParentTask()" />Parent Task
+    </div>
+  </div>
+
+
+  <div class="row top_margin">
+    <div class="col-md-2 col-sm-2">
+      <label>Priority </label>
+    </div>
+    <div class="col-md-10 col-sm-10">
+      <div class="dvrange">
+        <span class="font-weight-bold mr-2 mt-1">0</span>
+        <span class="font-weight-bold ml-2 mt-1" style="float:right">30</span>
+      </div>
+      <input type="range" min="0" max="30" [(ngModel)]="taskinfo.Priority" name="Priority" [disabled]="IsParentTask" />
+    </div>
+  </div>
+  <div class="row top_margin" style="margin-top: 30px!important;">
+    <div class="col-md-2 col-sm-2">
+      <label>Parent Task </label>
+    </div>
+    <div class="col-sm-7 col-lg-8">
+      <input type="text" [readonly]="true"
+             value="{{ParentName}}" class="form-control" />
+      <input type="hidden" [(ngModel)]="taskinfo.Parent_ID" />&nbsp;
+
+
+    </div>
+    <div class="col-sm-2 col-lg-2 col-sm-pull-4">
+      <button (click)="OnParentSearchOpen()">Search</button>
+    </div>
+  </div>
+  <div class="row top_margin">
+    <div class="col-md-2 col-sm-2">
+      <label>Start Date </label>
+    </div>
+    <div class="col-md-10 col-sm-10 form-group">
+      <input class="textboxWidh form-control" type="date" [ngModel]="taskinfo.Start_Date | date:'yyyy-MM-dd'" (ngModelChange)="taskinfo.Start_Date = $event" name="Start_Date" [disabled]="IsParentTask" />
+
+    </div>
+  </div>
+  <div class="row top_margin">
+    <div class="col-md-2 col-sm-2">
+      <label>End Date </label>
+    </div>
+    <div class="col-md-10 col-sm-10 form-group">
+      <input class="textboxWidh form-control" type="date" [ngModel]="taskinfo.End_Date | date:'yyyy-MM-dd'" (ngModelChange)="taskinfo.End_Date = $event" name="End_Date" [disabled]="IsParentTask" />
+
+    </div>
+
+  </div>
+  <div class="row top_margin">
+    <div class="col-md-push-2 col-sm-push-2 col-xs-12">
+      <div class="row">
+        <div class="col-md-2 col-lg-2 col-sm-3 top_margin_button">
+          <button class="btn btn-block" (click)="SaveTask()">{{ taskinfo.Task_ID > 0 ? 'Update ' : 'Add' }} Task</button>
+        </div>
+        <div class="col-md-2 col-lg-2 col-sm-3 top_margin_button">
+          <button class="btn btn-block" (click)="ResetTask()">Reset</button>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+  <div #ProjectModel class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title ">Select Project</h5>
+          <button type="button" class="close" (click)="OnProjectSearchClose()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <table class="table table-bordered">
+            <tr>
+              <th>Select</th>
+              <th>Project ID</th>
+              <th>Project</th>
+              <th>Start Date</th>
+              <th>End Date</th>
+              <th>Priority</th>
+
+            </tr>
+            <tr *ngFor="let x of ProjectInfoList">
+              <td><input type="radio" name="ProjectID" value="{{x.Project_ID}}" [(ngModel)]="SelectedProjectId" /></td>
+              <td>{{x.Project_ID}}</td>
+              <td>{{x.Project}}</td>
+              <td>{{x.Start_Date | date:'yyyy-MM-dd'}}</td>
+              <td>{{x.End_Date | date:'yyyy-MM-dd'}}</td>
+              <td>{{x.Priority}}</td>
+
+            </tr>
+          </table>
+          <div>
+            <button class="btn btn-default" (click)="OnProjectSearchSave()">Save&nbsp; &nbsp;</button> &nbsp;
+            <button class="btn btn-default" (click)="OnProjectSearchClose()">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div #ParentModel class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title ">Select Parent Task</h5>
+          <button type="button" class="close" (click)="OnParentSearchClose()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <table class="table table-bordered">
+            <tr>
+              <th>Select</th>
+              <th>Parent Task Name</th>
+              <th>Project</th>
+            </tr>
+            <tr *ngFor="let x of ListParentTask">
+              <td><input type="radio" name="ParentID" value="{{x.Parent_ID}}" [(ngModel)]="SelectedParentID" /></td>
+              <td>{{x.Parent_Task}}</td>
+              <td>{{x.ProjectInfo?.Project}}</td>
+            </tr>
+          </table>
+          <div>
+            <button class="btn btn-default" (click)="OnParentSearchSave()">Save&nbsp; &nbsp;</button> &nbsp;
+            <button class="btn btn-default" (click)="OnParentSearchClose()">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
