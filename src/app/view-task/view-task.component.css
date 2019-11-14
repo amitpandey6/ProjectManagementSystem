@@ -1,0 +1,41 @@
+﻿.margin-bottom-20 {
+  margin-bottom: 20px;
+}
+
+.margin-bottom-10 {
+  margin-bottom: 10px;
+}
+
+@media (min-width: 320px) and (max-width: 767px) {
+  input {
+    width: 100%;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+
+  input[type=number] {
+    width: 10%;
+  }
+
+  input[type=date] {
+    width: 17%;
+  }
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+  label {
+    padding: 10px;
+  }
+
+  input[type=number] {
+    width: 10%;
+  }
+
+  input[type=date] {
+    width: 17%;
+  }
+}
+
+@media (min-width: 1200px) {
+}
