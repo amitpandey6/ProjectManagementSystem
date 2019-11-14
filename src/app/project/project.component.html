@@ -1,0 +1,146 @@
+﻿
+<div class="container form-inline" style="max-width:80%">
+  <div class="row">
+    <div class="alert alert-warning" *ngIf="MessageType=='Error'">
+      <strong>Warning!</strong> {{MessageInfo}}
+    </div>
+    <div class="alert alert-success" *ngIf="MessageType=='Sucesses'">
+      <strong>Success!</strong> {{MessageInfo}}
+    </div>
+  </div>
+  <div class="row top-margin">
+    <div class="col-sm-2 col-lg-1">
+      <label>Project :</label>
+    </div>
+    <div class="col-sm-10 col-lg-11">
+      <input type="text" [(ngModel)]="ProjectInfo.Project" name="First_Name" />
+    </div>
+  </div>
+  <div class="row top-margin">
+    <div class="col-sm-2 col-lg-1">
+    </div>
+    <div class="col-sm-10 col-lg-11">
+      <label style="font-size:12px;font-weight: normal;"><input type="checkbox" name="SetDate" (click)="OnSetDate()" [(ngModel)]="SetDate" /> Set Start and End date</label> &nbsp;
+      <input type="date" [disabled]="!SetDate" [ngModel]="ProjectInfo.Start_Date | date:'yyyy-MM-dd'" (ngModelChange)="ProjectInfo.Start_Date = $event" name="Start_Date" /> &nbsp;
+      <input type="date" [disabled]="!SetDate" [ngModel]="ProjectInfo.End_Date | date:'yyyy-MM-dd'" (ngModelChange)="ProjectInfo.End_Date = $event" name="End_Date" />
+    </div>
+  </div>
+  <!--<div class="row top-margin">
+    <div class="col-sm-2 col-lg-1">
+      <label>Priority :</label>
+    </div>
+    <div class="col-sm-10 col-lg-11" style="display:inline-flex;">
+      0<input style="width:auto" type="range" min="0" max="30" [(ngModel)]="ProjectInfo.Priority" name="Priority" />30
+    </div>
+  </div>-->
+
+  <div class="row top_margin">
+    <div class="col-sm-2 col-lg-1">
+      <label>Priority :</label>
+    </div>
+    <div class="col-md-5 col-sm-5">
+      <div class="dvrange">
+        <span class="font-weight-bold mr-2 mt-1">0</span>
+        <span class="font-weight-bold ml-2 mt-1" style="float:right">30</span>
+      </div>
+      <input type="range" min="0" max="30" [(ngModel)]="ProjectInfo.Priority" name="Priority"/>
+    </div>
+  </div>
+
+  <div class="row top-margin">
+    <div class="col-sm-2 col-lg-1">
+      <label>Manager :</label>
+    </div>
+    <div class="col-sm-10 col-lg-11">
+      <input type="text" [readonly]="true"
+             value="{{UserName}}" />
+      <input type="hidden" [(ngModel)]="ProjectInfo.User_ID" />&nbsp;
+      <button (click)="OnManagerSearchOpen()">Search</button>
+
+    </div>
+  </div>
+  <div class="row top-margin">
+    <div class="col-sm-2 col-lg-1">
+
+    </div>
+    <div class="col-sm-10 col-lg-11">
+      <button class="btn btn-default" (click)="OnAddUpdate()"> {{ActionText}}</button>&nbsp;
+      <button class="btn btn-default" (click)="OnResetInfo()">Reset</button>
+    </div>
+  </div>
+  <hr />
+  <div class="row">
+    <div class="col-sm-12 col-lg-12">
+      <input type="text"
+             placeholder="Search....."
+             [(ngModel)]="SearchValue"
+             name="SearchValue"
+             (change)="OnSearchInfo()"
+             style="width:100%;" />
+    </div>
+  </div>
+  <div class="row top-margin">
+    <div class="col-sm-12 col-lg-12">
+      Sort By:
+      <button class="btn btn-default" (click)="OnSort('StartDate')">Start Date</button> &nbsp;
+      <button class="btn btn-default" (click)="OnSort('EndDate')">End Date</button>&nbsp;
+      <button class="btn btn-default" (click)="OnSort('Priority')">Priority</button>&nbsp;
+      <button class="btn btn-default" (click)="OnSort('Completed')">Completed</button>
+    </div>
+  </div>
+  <div class="row" *ngFor="let x of ProjectInfoList">
+    <hr class="dottedHR" />
+    <div class="col-sm-10 col-lg-11">
+      <table class="table table-borderless">
+        <tr>
+          <td colspan="2"><b>Project:</b>&nbsp;{{x.Project}}</td>
+          <td rowspan="3"><b>Priority:</b> <br />{{x.Priority}}</td>
+        </tr>
+        <tr>
+          <td><b>No Of Task:</b> {{x.NoOfTask}}</td>
+          <td><b>Comlpeted:</b> {{x.CompletedTask}}</td>
+        </tr>
+        <tr>
+          <td><b>Start Date:</b> {{x.Start_Date | date:'yyyy-MM-dd'}}</td>
+          <td><b>End Date:</b> {{x.End_Date | date:'yyyy-MM-dd'}}</td>
+        </tr>
+      </table>
+    </div>
+    <div class="col-sm-2 col-lg-1">
+      <button class="btn btn-default" (click)="OnEdit(x.Project_ID)"> &nbsp;Update&nbsp; </button> &nbsp;
+      <button class="btn btn-default top-margin" (click)="OnDelete(x.Project_ID)">Suspend</button>
+    </div>
+  </div>
+  <div #ManagerModel class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title ">Select Manager</h5>
+          <button type="button" class="close" (click)="OnManagerSearchClose()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <table class="table table-bordered">
+            <tr>
+              <th>Select</th>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>Employee ID</th>
+            </tr>
+            <tr *ngFor="let x of UserInfoList">
+              <td><input type="radio" name="SelectedUserId" value="{{x.User_ID}}" [(ngModel)]="SelectedUserId" /></td>
+              <td>{{x.First_Name}}</td>
+              <td>{{x.Last_Name}}</td>
+              <td>{{x.Employee_ID}}</td>
+            </tr>
+          </table>
+          <div>
+            <button class="btn btn-default" (click)="OnManagerSearchSave()">Save&nbsp; &nbsp;</button> &nbsp;
+            <button class="btn btn-default" (click)="OnManagerSearchClose()">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
